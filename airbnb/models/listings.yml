@@ -1,0 +1,18 @@
+semantic_models:
+  - name: listings
+    description: "Semantic model for Airbnb listings."
+    model: ref('dim_listings_cleansed')
+
+    entities:
+      - name: listing
+        type: primary
+        expr: listing_id
+      - name: host
+        type: foreign
+        expr: host_id
+
+    dimensions:
+      - name: room_type
+        type: categorical
+      - name: listing_name
+        type: categorical

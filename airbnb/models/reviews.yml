@@ -1,0 +1,44 @@
+models:
+  - name: metricflow_time_spine
+    description: "Time spine model required by the semantic layer."
+    columns:
+      - name: date_day
+        granularity: day
+
+semantic_models:
+  - name: reviews
+    description: "Semantic model for Airbnb reviews."
+    model: ref('fct_reviews')
+    defaults:
+      agg_time_dimension: review_date
+
+    entities:
+      - name: review
+        type: primary
+        expr: review_id
+      - name: listing
+        type: foreign
+        expr: listing_id
+
+    dimensions:
+      - name: review_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: reviewer_name
+        type: categorical
+      - name: review_sentiment
+        type: categorical
+
+    measures:
+      - name: review_count
+        agg: count
+        expr: review_id
+
+metrics:
+  - name: review_count
+    label: "Review Count"
+    description: "Count of reviews."
+    type: simple
+    type_params:
+      measure: review_count
